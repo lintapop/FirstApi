@@ -17,6 +17,31 @@ namespace FirstApi.Models
             get; set;
         }
 
+        public virtual DbSet<ArtistInfo> ArtistInfos
+        {
+            get; set;
+        }
+
+        public virtual DbSet<Bid> Bids
+        {
+            get; set;
+        }
+
+        public virtual DbSet<ProductImage> ProductImages
+        {
+            get; set;
+        }
+
+        public virtual DbSet<Product> Products
+        {
+            get; set;
+        }
+
+        public virtual DbSet<Genre> Genres
+        {
+            get; set;
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
         }

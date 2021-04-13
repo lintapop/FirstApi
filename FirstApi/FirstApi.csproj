@@ -184,9 +184,22 @@
     <Compile Include="Migrations\202103310922338_remove Datetime.Designer.cs">
       <DependentUpon>202103310922338_remove Datetime.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202104010338370_test.cs" />
+    <Compile Include="Migrations\202104010338370_test.Designer.cs">
+      <DependentUpon>202104010338370_test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104130714589_full.cs" />
+    <Compile Include="Migrations\202104130714589_full.Designer.cs">
+      <DependentUpon>202104130714589_full.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ArtistInfo.cs" />
+    <Compile Include="Content\unused file\ArtistInfoImage.cs" />
+    <Compile Include="Models\Bid.cs" />
     <Compile Include="Models\DBContext.cs" />
+    <Compile Include="Models\Genre.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductImage.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -290,6 +303,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202103310922338_remove Datetime.resx">
       <DependentUpon>202103310922338_remove Datetime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104010338370_test.resx">
+      <DependentUpon>202104010338370_test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104130714589_full.resx">
+      <DependentUpon>202104130714589_full.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

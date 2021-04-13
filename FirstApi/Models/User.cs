@@ -11,14 +11,15 @@ namespace FirstApi.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id
+        [Display(Name = "使用者id")]
+        public int Id
         {
             get; set;
         }
 
         [Required]
         [Display(Name = "全名")]
-        public string fullname
+        public string Fullname
         {
             get; set;
         }
@@ -27,7 +28,7 @@ namespace FirstApi.Models
         [Display(Name = "電子郵件")]
         [StringLength(30, ErrorMessage = "請輸入電子郵件")]
         [EmailAddress(ErrorMessage = "not legit email format")]
-        public string email
+        public string Email
         {
             get; set;
         }
@@ -35,7 +36,7 @@ namespace FirstApi.Models
         [Required]
         [Display(Name = "登入密碼")]
         [StringLength(50, ErrorMessage = "超過", MinimumLength = 6)]
-        public string password
+        public string Password
         {
             get; set;
         }
@@ -54,13 +55,13 @@ namespace FirstApi.Models
         }
 
         [Display(Name = "使用者頭像")]
-        public string avatar
+        public string Avatar
         {
             get; set;
         }
 
         [Display(Name = "會員創建時間")]
-        public DateTime? createdAt
+        public DateTime? CreatedAt
         {
             get; set;
         }
@@ -68,19 +69,31 @@ namespace FirstApi.Models
         [Required]
         [StringLength(50, ErrorMessage = "超過", MinimumLength = 9)]
         [Display(Name = "手機號碼")]
-        public string phone
+        public string Phone
         {
             get; set;
         }
 
         [Display(Name = "是否為藝術家")]
-        public Boolean isArtist
+        public Boolean IsArtist
         {
             get; set;
         }
 
-        //建立一對多關聯 (這邊是爸爸)
+        //建立一對多關聯 (這邊是爸爸) 下面是關聯出去的表單名稱
         public virtual ICollection<ArtistInfo> ArtistInfos
+        {
+            get; set;
+        }
+
+        //一對多關聯給Bid
+        public virtual ICollection<Bid> Bids
+        {
+            get; set;
+        }
+
+        //一對多關聯給Product
+        public virtual ICollection<Product> Products
         {
             get; set;
         }

@@ -50,7 +50,7 @@ namespace FirstApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                user.createdAt = DateTime.Now;
+                user.CreatedAt = DateTime.Now;
                 db.Users.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");

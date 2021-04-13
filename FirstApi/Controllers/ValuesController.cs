@@ -34,8 +34,8 @@ namespace FirstApi.Controllers
         [HttpPost]
         public string Post(string account, string password)
         {
-            var user = db.Users.Where(x => x.email == account).FirstOrDefault();
-            if (password == user.password)
+            var user = db.Users.Where(x => x.Email == account).FirstOrDefault();
+            if (password == user.Password)
             {
                 return "successful";
             }
