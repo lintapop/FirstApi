@@ -80,17 +80,18 @@ namespace FirstApi.Models
             get; set;
         }
 
-        //建立一對多關聯 (這邊是爸爸) 下面是關聯出去的表單名稱
+        //   下面是關聯出去的表單名稱
+
         public virtual ICollection<ArtistInfo> ArtistInfos
         {
             get; set;
         }
 
-        //一對多關聯給Bid
-        public virtual ICollection<Bid> Bids
-        {
-            get; set;
-        }
+        ////一對多關聯給Bid
+        //public virtual ICollection<Bid> Bids
+        //{
+        //    get; set;
+        //}
 
         //一對多關聯給Product
         public virtual ICollection<Product> Products

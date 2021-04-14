@@ -17,18 +17,18 @@ namespace FirstApi.Models
             get; set;
         }
 
-        [Display(Name = "外部關聯的實體-使用者id")]
-        public int UserId
-        {
-            get; set;
-        }
+        //[Display(Name = "外部關聯的實體-使用者id")]
+        //public int UserId
+        //{
+        //    get; set;
+        //}
 
-        [Display(Name = "外部關聯的虛擬-使用者id")]
-        [ForeignKey("UserId")]
-        public virtual User Users
-        {
-            get; set;
-        }
+        //[Display(Name = "外部關聯的虛擬-使用者id")]
+        //[ForeignKey("UserId")]
+        //public virtual User Users
+        //{
+        //    get; set;
+        //}
 
         [Display(Name = "外部關聯的實體-Product id")]
         public int ProductId

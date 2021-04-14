@@ -3,26 +3,10 @@ namespace FirstApi.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class full : DbMigration
+    public partial class cycleissuesolved : DbMigration
     {
         public override void Up()
         {
-            CreateTable(
-                "dbo.Bids",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        UserId = c.Int(nullable: false),
-                        ProductId = c.Int(nullable: false),
-                        CreatedAt = c.DateTime(nullable: false),
-                        BidPrice = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
-                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
-                .Index(t => t.UserId)
-                .Index(t => t.ProductId);
-            
             CreateTable(
                 "dbo.Products",
                 c => new
@@ -71,24 +55,35 @@ namespace FirstApi.Migrations
                 .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
                 .Index(t => t.ProductId);
             
+            CreateTable(
+                "dbo.Bids",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        ProductId = c.Int(nullable: false),
+                        CreatedAt = c.DateTime(nullable: false),
+                        BidPrice = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
+                .Index(t => t.ProductId);
+            
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.Bids", "UserId", "dbo.Users");
             DropForeignKey("dbo.Bids", "ProductId", "dbo.Products");
             DropForeignKey("dbo.Products", "UserId", "dbo.Users");
             DropForeignKey("dbo.ProductImages", "ProductId", "dbo.Products");
             DropForeignKey("dbo.Products", "GenreId", "dbo.Genres");
+            DropIndex("dbo.Bids", new[] { "ProductId" });
             DropIndex("dbo.ProductImages", new[] { "ProductId" });
             DropIndex("dbo.Products", new[] { "GenreId" });
             DropIndex("dbo.Products", new[] { "UserId" });
-            DropIndex("dbo.Bids", new[] { "ProductId" });
-            DropIndex("dbo.Bids", new[] { "UserId" });
+            DropTable("dbo.Bids");
             DropTable("dbo.ProductImages");
             DropTable("dbo.Genres");
             DropTable("dbo.Products");
-            DropTable("dbo.Bids");
         }
     }
 }
