@@ -2,117 +2,164 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Web;
-using System.Web.Mvc;
+using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Web.Http;
+using System.Web.Http.Description;
 using FirstApi.Models;
+using FirstApi.Utils;
 
 namespace FirstApi.Controllers
 {
-    public class UsersController : Controller
+    public class UsersController : ApiController
     {
-        private Models.DBContext db = new Models.DBContext();
+        private DBContext db = new DBContext();
 
-        // GET: Users
-        public ActionResult Index()
+        // GET: api/Users1
+        public IQueryable<User> GetUsers()
         {
-            return View(db.Users.ToList());
+            return db.Users;
         }
 
-        // GET: Users/Details/5
-        public ActionResult Details(int? id)
+        // GET: api/Users1/5
+        [ResponseType(typeof(User))]
+        public IHttpActionResult GetUser(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             User user = db.Users.Find(id);
             if (user == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
-            return View(user);
+
+            return Ok(user);
         }
 
-        // GET: Users/Create
-        public ActionResult Create()
+        // PUT: api/Users1/5
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutUser(int id, User user)
         {
-            return View();
-        }
-
-        // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,avatar,email,password,PasswordSalt,Authority,createdAt,fullname,phone,isArtist")] User user)
-        {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                user.CreatedAt = DateTime.Now;
+                return BadRequest(ModelState);
+            }
+
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        // POST: api/User1/SignUp
+        // 使用者登入
+
+        [HttpPost]
+        [ResponseType(typeof(User))]
+        [Route("SignUp")]
+        // 使用者註冊
+        public IHttpActionResult PostSignUp(User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = db.Users.FirstOrDefault(x => x.Email == user.Email);
+            Regex regex = new Regex(@"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z\.][a-zA-Z]{1,3}");
+            Match match = regex.Match(user.Email);
+            if (!match.Success)
+            {
+                return Ok("Email格式輸入錯誤!");
+            }
+            if (result == null)
+            {
+                user.PasswordSalt = Utils.salt.CreateSalt();
+                user.Password = Utils.salt.GenerateHashWithSalt(user.Password, user.PasswordSalt);
+                // user.CreatedAt = DateTime.Now;
+                ////使用者權限(結帳按鈕後面所有頁面) 接前端 故留前端寫步道的東西
+                //user.Avatar = "avatar.jpg";
+                //user.Email = "artion@gmail.com";
+                //user.Fullname = "darlin";
+                //user.Phone = "0973647372";
+                //user.IsArtist = true;
+
                 db.Users.Add(user);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Ok($"{user.Fullname}註冊成功");
             }
-
-            return View(user);
+            else
+            {
+                return BadRequest("帳號已有人使用");
+            }
         }
 
-        // GET: Users/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
-        }
-
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, //for more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/Login
+        //登入
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,avatar,email,password,PasswordSalt,Authority,createdAt,fullname,phone,isArtist")] User user)
+        [Route("Login")]
+        //[ResponseType(typeof(user))]
+        public IHttpActionResult Login([FromBody] Login login)
         {
-            if (ModelState.IsValid)
+            //確認輸入的Email是否正確
+            var user = db.Users.FirstOrDefault(x => x.Email == login.Email);
+            if (user == null)
+                return Ok("登入失敗");
+
+            //確認輸入的密碼是否正確
+            string pwd = salt.GenerateHashWithSalt(login.Password, user.PasswordSalt);
+            if (user.Password != pwd)
+                return Ok("登入失敗");
+
+            //生成token
+            var jwtAuth = new JwtAuthUtil();
+            var token = jwtAuth.GenerateToken(user.Id.ToString(), user.Email, user.Authority);
+
+            return Ok(new
             {
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(user);
+                user.Id,
+                user.Email,
+                user.Fullname,
+                user.Authority,
+                user.Avatar,
+                token
+            });
         }
 
-        // GET: Users/Delete/5
-        public ActionResult Delete(int? id)
+        // DELETE: api/Users1/5
+        [ResponseType(typeof(User))]
+        public IHttpActionResult DeleteUser(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             User user = db.Users.Find(id);
             if (user == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
-            return View(user);
-        }
 
-        // POST: Users/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            User user = db.Users.Find(id);
             db.Users.Remove(user);
             db.SaveChanges();
-            return RedirectToAction("Index");
+
+            return Ok(user);
         }
 
         protected override void Dispose(bool disposing)
@@ -122,6 +169,11 @@ namespace FirstApi.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private bool UserExists(int id)
+        {
+            return db.Users.Count(e => e.Id == id) > 0;
         }
     }
 }

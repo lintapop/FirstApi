@@ -48,6 +48,7 @@ namespace FirstApi.Models
             get; set;
         }
 
+        //todo:這欄不要哩
         [Display(Name = "權限")]
         public string Authority
         {
