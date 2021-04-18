@@ -8,12 +8,14 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using FirstApi.Models;
 using FirstApi.Utils;
 
 namespace FirstApi.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class UsersController : ApiController
     {
         private DBContext db = new DBContext();
@@ -92,11 +94,12 @@ namespace FirstApi.Controllers
             {
                 return Ok("Email格式輸入錯誤!");
             }
+
             if (result == null)
             {
                 user.PasswordSalt = Utils.salt.CreateSalt();
                 user.Password = Utils.salt.GenerateHashWithSalt(user.Password, user.PasswordSalt);
-                // user.CreatedAt = DateTime.Now;
+                user.CreatedAt = DateTime.Now;
                 ////使用者權限(結帳按鈕後面所有頁面) 接前端 故留前端寫步道的東西
                 //user.Avatar = "avatar.jpg";
                 //user.Email = "artion@gmail.com";

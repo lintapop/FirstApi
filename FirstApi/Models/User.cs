@@ -48,7 +48,7 @@ namespace FirstApi.Models
             get; set;
         }
 
-        //todo:這欄不要哩
+        //這欄用不到
         [Display(Name = "權限")]
         public string Authority
         {
@@ -68,7 +68,8 @@ namespace FirstApi.Models
         }
 
         [Required]
-        [StringLength(50, ErrorMessage = "超過", MinimumLength = 9)]
+        //[StringLength(50, ErrorMessage = "輸入長度要大於9", MinimumLength = 9)]
+        [StringLength(50)]
         [Display(Name = "手機號碼")]
         public string Phone
         {

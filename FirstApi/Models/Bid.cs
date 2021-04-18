@@ -17,6 +17,7 @@ namespace FirstApi.Models
             get; set;
         }
 
+        //user id 會造成圈圈 所以刪掉
         //[Display(Name = "外部關聯的實體-使用者id")]
         //public int UserId
         //{
