@@ -7,37 +7,37 @@ using System.Web;
 
 namespace FirstApi.Models
 {
-    public class ArtistInfo
+    public class ArtistInfo //:User
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "藝術家id")]
-        public int id
+        public int Id
         {
             get; set;
         }
 
-        [Display(Name = "使用者id:外部關聯的實體")]
-        public int userId
+        [Display(Name = "使用者Id:外部關聯的實體")]
+        public int UserId
         {
             get; set;
         }
 
         [Display(Name = "使用者id:外部關聯父權限")]
-        [ForeignKey("userId")] //這邊id對應user表單
+        [ForeignKey("UserId")] //這邊id對應user表單
         public virtual User Users
         {
             get; set;
         }
 
         [Display(Name = "藝術家介紹")]
-        public string description
+        public string Description
         {
             get; set;
         }
 
         [Display(Name = "藝術家照片")]
-        public string images
+        public string Images
         {
             get; set;
         }

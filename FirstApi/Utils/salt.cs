@@ -31,6 +31,7 @@ namespace FirstApi.Utils
         /// </summary>
         /// <param name="password">密碼明碼</param>
         /// <returns>Hash後密碼</returns>
+        [Obsolete]
         public static string CreateHash(string password)
         {
             string salt = CreateSalt();

@@ -18,67 +18,69 @@ namespace FirstApi.Controllers
     [EnableCors("*", "*", "*")]
     public class UsersController : ApiController
     {
-        private DBContext db = new DBContext();
+        private readonly DBContext db = new DBContext();
 
-        // GET: api/Users1
-        public IQueryable<User> GetUsers()
+        [HttpGet]
+        [JwtAuthFilter]
+        [Route("GetPersonalDetail")]
+        public IHttpActionResult GetUser(User user)
         {
-            return db.Users;
-        }
+            var result = db.Users.FirstOrDefault(x => x.Id == user.Id);
 
-        // GET: api/Users1/5
-        [ResponseType(typeof(User))]
-        public IHttpActionResult GetUser(int id)
-        {
-            User user = db.Users.Find(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(new
+            {
+                user.Id,
+                user.Fullname,
+                user.Phone,
+                user.Email,
+                user.Avatar,
+                user.CreatedAt,
+                user.ArtistInfos,
+                user.IsArtist,
+            });
         }
 
-        // PUT: api/Users1/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutUser(int id, User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        [HttpPut]
+        [Route("UpdateInfo")]
+        //public IHttpActionResult PutUser(int id, User user)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
+        //    if (id != user.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            db.Entry(user).State = EntityState.Modified;
+        //    db.Entry(user).State = EntityState.Modified;
 
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        db.SaveChanges();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!UserExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/User1/SignUp
-        // 使用者登入
+        //    return StatusCode(HttpStatusCode.NoContent);
+        //}
 
         [HttpPost]
-        [ResponseType(typeof(User))]
         [Route("SignUp")]
         // 使用者註冊
         public IHttpActionResult PostSignUp(User user)
@@ -100,12 +102,7 @@ namespace FirstApi.Controllers
                 user.PasswordSalt = Utils.salt.CreateSalt();
                 user.Password = Utils.salt.GenerateHashWithSalt(user.Password, user.PasswordSalt);
                 user.CreatedAt = DateTime.Now;
-                ////使用者權限(結帳按鈕後面所有頁面) 接前端 故留前端寫步道的東西
-                //user.Avatar = "avatar.jpg";
-                //user.Email = "artion@gmail.com";
-                //user.Fullname = "darlin";
-                //user.Phone = "0973647372";
-                //user.IsArtist = true;
+                user.GuId = Guid.NewGuid().ToString();
 
                 db.Users.Add(user);
                 db.SaveChanges();
@@ -117,12 +114,9 @@ namespace FirstApi.Controllers
             }
         }
 
-        // POST: api/Login
-        //登入
         [HttpPost]
         [Route("Login")]
-        //[ResponseType(typeof(user))]
-        public IHttpActionResult Login([FromBody] Login login)
+        public IHttpActionResult PostLogin([FromBody] Login login)
         {
             //確認輸入的Email是否正確
             var user = db.Users.FirstOrDefault(x => x.Email == login.Email);
@@ -136,34 +130,36 @@ namespace FirstApi.Controllers
 
             //生成token
             var jwtAuth = new JwtAuthUtil();
-            var token = jwtAuth.GenerateToken(user.Id.ToString(), user.Email, user.Authority);
+            var token = jwtAuth.GenerateToken(user.GuId, user.Email, user.IsArtist.ToString());
 
             return Ok(new
             {
-                user.Id,
+                user.GuId,
                 user.Email,
                 user.Fullname,
-                user.Authority,
+                user.IsArtist,
                 user.Avatar,
                 token
             });
         }
 
-        // DELETE: api/Users1/5
-        [ResponseType(typeof(User))]
-        public IHttpActionResult DeleteUser(int id)
-        {
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+        //只要ｔｏｋｅｎ拿掉　就是登出哩　所以後端不寫ｌｏｇＯｕｔ
+        //[HttpDelete]
+        //[Route("LogOut")]  //attribute routing
+        ////[ResponseType(typeof(User))]
+        //public IHttpActionResult DeleteLogOut(int id)
+        //{
+        //    User user = db.Users.Find(id);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            db.Users.Remove(user);
-            db.SaveChanges();
+        //    db.Users.Remove(user);
+        //    db.SaveChanges();
 
-            return Ok(user);
-        }
+        //    return Ok(user);
+        //}
 
         protected override void Dispose(bool disposing)
         {
@@ -172,11 +168,6 @@ namespace FirstApi.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private bool UserExists(int id)
-        {
-            return db.Users.Count(e => e.Id == id) > 0;
         }
     }
 }

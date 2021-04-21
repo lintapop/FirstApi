@@ -45,5 +45,10 @@ namespace FirstApi.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
         }
+
+        public System.Data.Entity.DbSet<FirstApi.Models.ArtistInfoImage> ArtistInfoImages
+        {
+            get; set;
+        }
     }
 }

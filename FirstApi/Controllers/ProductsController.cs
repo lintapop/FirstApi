@@ -7,49 +7,51 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using FirstApi.Models;
 
 namespace FirstApi.Controllers
 {
-    public class ArtistInfoesController : ApiController
+    [EnableCors("*", "*", "*")]
+    public class ProductsController : ApiController
     {
         private DBContext db = new DBContext();
 
-        // GET: api/ArtistInfoes
-        public IQueryable<ArtistInfo> GetArtistInfos()
+        // GET: api/Products
+        public IQueryable<Product> GetProducts()
         {
-            return db.ArtistInfos;
+            return db.Products;
         }
 
-        // GET: api/ArtistInfoes/5
-        [ResponseType(typeof(ArtistInfo))]
-        public IHttpActionResult GetArtistInfo(int id)
+        // GET: api/Products/5
+        [ResponseType(typeof(Product))]
+        public IHttpActionResult GetProduct(int id)
         {
-            ArtistInfo artistInfo = db.ArtistInfos.Find(id);
-            if (artistInfo == null)
+            Product product = db.Products.Find(id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return Ok(artistInfo);
+            return Ok(product);
         }
 
-        // PUT: api/ArtistInfoes/5
+        // PUT: api/Products/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutArtistInfo(int id, ArtistInfo artistInfo)
+        public IHttpActionResult PutProduct(int id, Product product)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != artistInfo.Id)
+            if (id != product.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(artistInfo).State = EntityState.Modified;
+            db.Entry(product).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +59,7 @@ namespace FirstApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ArtistInfoExists(id))
+                if (!ProductExists(id))
                 {
                     return NotFound();
                 }
@@ -70,35 +72,38 @@ namespace FirstApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/ArtistInfoes
-        [ResponseType(typeof(ArtistInfo))]
-        public IHttpActionResult PostArtistInfo(ArtistInfo artistInfo)
+        // POST: api/Products
+        [ResponseType(typeof(Product))]
+        public IHttpActionResult PostProduct(Product product)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.ArtistInfos.Add(artistInfo);
+            db.Products.Add(product);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = artistInfo.Id }, artistInfo);
+            return CreatedAtRoute("DefaultApi", new
+            {
+                id = product.Id
+            }, product);
         }
 
-        // DELETE: api/ArtistInfoes/5
-        [ResponseType(typeof(ArtistInfo))]
-        public IHttpActionResult DeleteArtistInfo(int id)
+        // DELETE: api/Products/5
+        [ResponseType(typeof(Product))]
+        public IHttpActionResult DeleteProduct(int id)
         {
-            ArtistInfo artistInfo = db.ArtistInfos.Find(id);
-            if (artistInfo == null)
+            Product product = db.Products.Find(id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            db.ArtistInfos.Remove(artistInfo);
+            db.Products.Remove(product);
             db.SaveChanges();
 
-            return Ok(artistInfo);
+            return Ok(product);
         }
 
         protected override void Dispose(bool disposing)
@@ -110,9 +115,9 @@ namespace FirstApi.Controllers
             base.Dispose(disposing);
         }
 
-        private bool ArtistInfoExists(int id)
+        private bool ProductExists(int id)
         {
-            return db.ArtistInfos.Count(e => e.Id == id) > 0;
+            return db.Products.Count(e => e.Id == id) > 0;
         }
     }
 }

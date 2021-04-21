@@ -173,15 +173,19 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\ArtistInfoesController.cs" />
+    <Compile Include="Controllers\ArtistInfoImagesController.cs" />
+    <Compile Include="Controllers\BidsController.cs" />
+    <Compile Include="Controllers\GenresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202104130746283_cycle issue solved.cs" />
-    <Compile Include="Migrations\202104130746283_cycle issue solved.Designer.cs">
-      <DependentUpon>202104130746283_cycle issue solved.cs</DependentUpon>
+    <Compile Include="Migrations\202104210713286_put.cs" />
+    <Compile Include="Migrations\202104210713286_put.Designer.cs">
+      <DependentUpon>202104210713286_put.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ArtistInfo.cs" />
@@ -253,6 +257,11 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Genres\Create.cshtml" />
+    <Content Include="Views\Genres\Delete.cshtml" />
+    <Content Include="Views\Genres\Details.cshtml" />
+    <Content Include="Views\Genres\Edit.cshtml" />
+    <Content Include="Views\Genres\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -287,8 +296,8 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202104130746283_cycle issue solved.resx">
-      <DependentUpon>202104130746283_cycle issue solved.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202104210713286_put.resx">
+      <DependentUpon>202104210713286_put.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

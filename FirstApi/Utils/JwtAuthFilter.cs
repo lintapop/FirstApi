@@ -44,7 +44,7 @@ namespace FirstApi.Utils
                     ReasonPhrase = "Lost Token",
                     Content = new StringContent("code=5566")//自訂的錯誤訊息
                 };
-                throw new HttpResponseException(errorMessage);
+                //throw new HttpResponseException(errorMessage);
                 //throw new System.Exception("Lost Token");
             }
             else

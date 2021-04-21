@@ -17,6 +17,12 @@ namespace FirstApi.Models
             get; set;
         }
 
+        [Display(Name = "加密的GuId")]
+        public string GuId
+        {
+            get; set;
+        }
+
         [Required]
         [Display(Name = "全名")]
         public string Fullname
@@ -27,7 +33,7 @@ namespace FirstApi.Models
         [Required]
         [Display(Name = "電子郵件")]
         [StringLength(30, ErrorMessage = "請輸入電子郵件")]
-        [EmailAddress(ErrorMessage = "not legit email format")]
+        [EmailAddress(ErrorMessage = "invalid email format")]
         public string Email
         {
             get; set;

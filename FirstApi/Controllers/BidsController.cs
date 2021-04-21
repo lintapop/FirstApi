@@ -12,44 +12,44 @@ using FirstApi.Models;
 
 namespace FirstApi.Controllers
 {
-    public class ArtistInfoesController : ApiController
+    public class BidsController : ApiController
     {
         private DBContext db = new DBContext();
 
-        // GET: api/ArtistInfoes
-        public IQueryable<ArtistInfo> GetArtistInfos()
+        // GET: api/Bids
+        public IQueryable<Bid> GetBids()
         {
-            return db.ArtistInfos;
+            return db.Bids;
         }
 
-        // GET: api/ArtistInfoes/5
-        [ResponseType(typeof(ArtistInfo))]
-        public IHttpActionResult GetArtistInfo(int id)
+        // GET: api/Bids/5
+        [ResponseType(typeof(Bid))]
+        public IHttpActionResult GetBid(int id)
         {
-            ArtistInfo artistInfo = db.ArtistInfos.Find(id);
-            if (artistInfo == null)
+            Bid bid = db.Bids.Find(id);
+            if (bid == null)
             {
                 return NotFound();
             }
 
-            return Ok(artistInfo);
+            return Ok(bid);
         }
 
-        // PUT: api/ArtistInfoes/5
+        // PUT: api/Bids/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutArtistInfo(int id, ArtistInfo artistInfo)
+        public IHttpActionResult PutBid(int id, Bid bid)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != artistInfo.Id)
+            if (id != bid.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(artistInfo).State = EntityState.Modified;
+            db.Entry(bid).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +57,7 @@ namespace FirstApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ArtistInfoExists(id))
+                if (!BidExists(id))
                 {
                     return NotFound();
                 }
@@ -70,35 +70,35 @@ namespace FirstApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/ArtistInfoes
-        [ResponseType(typeof(ArtistInfo))]
-        public IHttpActionResult PostArtistInfo(ArtistInfo artistInfo)
+        // POST: api/Bids
+        [ResponseType(typeof(Bid))]
+        public IHttpActionResult PostBid(Bid bid)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.ArtistInfos.Add(artistInfo);
+            db.Bids.Add(bid);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = artistInfo.Id }, artistInfo);
+            return CreatedAtRoute("DefaultApi", new { id = bid.Id }, bid);
         }
 
-        // DELETE: api/ArtistInfoes/5
-        [ResponseType(typeof(ArtistInfo))]
-        public IHttpActionResult DeleteArtistInfo(int id)
+        // DELETE: api/Bids/5
+        [ResponseType(typeof(Bid))]
+        public IHttpActionResult DeleteBid(int id)
         {
-            ArtistInfo artistInfo = db.ArtistInfos.Find(id);
-            if (artistInfo == null)
+            Bid bid = db.Bids.Find(id);
+            if (bid == null)
             {
                 return NotFound();
             }
 
-            db.ArtistInfos.Remove(artistInfo);
+            db.Bids.Remove(bid);
             db.SaveChanges();
 
-            return Ok(artistInfo);
+            return Ok(bid);
         }
 
         protected override void Dispose(bool disposing)
@@ -110,9 +110,9 @@ namespace FirstApi.Controllers
             base.Dispose(disposing);
         }
 
-        private bool ArtistInfoExists(int id)
+        private bool BidExists(int id)
         {
-            return db.ArtistInfos.Count(e => e.Id == id) > 0;
+            return db.Bids.Count(e => e.Id == id) > 0;
         }
     }
 }

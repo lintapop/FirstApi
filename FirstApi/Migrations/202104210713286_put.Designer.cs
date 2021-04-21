@@ -7,13 +7,13 @@ namespace FirstApi.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class cycleissuesolved : IMigrationMetadata
+    public sealed partial class put : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(cycleissuesolved));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(put));
         
         string IMigrationMetadata.Id
         {
-            get { return "202104130746283_cycle issue solved"; }
+            get { return "202104210713286_put"; }
         }
         
         string IMigrationMetadata.Source

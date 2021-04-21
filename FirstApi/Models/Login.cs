@@ -9,7 +9,6 @@ namespace FirstApi.Models
     public class Login
     {
         //這支檔案不用登記到DBContext.cs裡 因為沒有需要show View
-        //需要密碼鹽和權限嗎?
 
         [Required]
         [Display(Name = "電子郵件")]
